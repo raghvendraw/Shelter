@@ -356,7 +356,7 @@ def get_answer(xml_key, fact_dict):
 	if xml_key in question_map_dict:
 		# get question id 
 		fact_id = question_map_dict[xml_key]
-		
+		#write_log('In get answer fact_id:' + str(fact_id))
 		# if question not found then return
 		if (fact_id is None):
 			return None
@@ -365,10 +365,11 @@ def get_answer(xml_key, fact_dict):
 		if fact_id in fact_dict:
 			# get answer for fact 
 			answer = fact_dict[fact_id]
-			
+			#write_log('Anwer for the fact id:' + str(answer))
 			#check fact has options (single or multi select )
 			if fact_id in question_option_map_dict:
 				#check if answer is list - this is in case of multi select option
+				#write_log('Has multiple answers for this question')
 				if isinstance(answer, list):
 					temp_answer = None
 					for ans in answer:
@@ -378,17 +379,54 @@ def get_answer(xml_key, fact_dict):
 								if temp_answer is None:
 									temp_answer = str('')
 								temp_answer = temp_answer + str(temp_ans) + ' '
-					
+						#write_log('After the answer is processed:' + temp_answer)
 					if not(temp_answer is None):
 						answer = temp_answer.strip()
 				else:
+					#write_log('In else condition')
 					if answer:
 						answer_option = int(answer)
 						if answer_option in question_option_map_dict[fact_id]:
 							answer = question_option_map_dict[fact_id][answer_option]
-		
+						#joined_string = (', '.join(str(x) for x in question_option_map_dict[fact_id]))
+						#joined_string = ',' + join(map(str, question_option_map_dict[fact_id]))	
+						#write_log('question_option_map_dict:' + joined_string)	
+						#write_log('answer_option:' + str(answer_option))
+						#write_log('End answer:' + str(answer))
 	return answer;
 
+	# get answer for xml key from question-answer dictionary
+def get_answer_type_of_unaccopied_house(xml_key, fact_dict):
+	global question_map_dict
+	global question_option_map_dict
+	answer = None
+	
+	if xml_key in question_map_dict:
+		# get question id 
+		fact_id = question_map_dict[xml_key]
+		#write_log('In get answer fact_id:' + str(fact_id))
+		# if question not found then return
+		if (fact_id is None):
+			return None
+		
+		# get answer as return
+		if fact_id in fact_dict:
+			# get answer for fact 
+			answer = fact_dict[fact_id]
+			#write_log('Anwer for the fact id:' + str(answer))
+			answer = get_collection_for_unaccopied_house(int(answer))
+			#write_log('Returned anwer for the fact id:' + str(answer))
+	return answer;
+
+def get_collection_for_unaccopied_house(x):
+    return {
+        3: '021',
+        4: '022',
+		5: '023',
+		6: '024',
+		7: '025'
+    }[x]
+	
 def get_name_id(xml_key, answer_text):
 	global option_dict
 	
@@ -546,6 +584,43 @@ def get_rhs_area_in_squar_feet(answer_sq_m):
 			
 	return area;
 
+def get_rhs_area_option_from_squar_feet(answer_sq_m):
+	area = 0
+	
+	if answer_sq_m:
+		try:
+			area = int(answer_sq_m)
+		except Exception:
+			if '*' in answer_sq_m:
+				area_size = answer_sq_m.split('*')
+				area = int(area_size[0]) * int(area_size[1])
+			elif ',' in answer_sq_m:
+				area = int(answer_sq_m.replace(',',''))
+			elif '/' in answer_sq_m:
+				area = int(answer_sq_m.replace('/',''))
+			elif isinstance(answer_sq_m, list):
+				area = int(answer_sq_m[0])
+			elif '`' in answer_sq_m:
+				area = int(answer_sq_m.replace('`',''))
+			elif 'sq' in answer_sq_m.lower():
+				area_sq_m = answer_sq_m.lower()
+				
+				unformatted_area = area_sq_m.replace('sq','').replace('.ft','')
+				
+				area = int(unformatted_area.strip())
+			else:
+				raise Exception
+	if 	area <= 100:
+		area = '01'
+	elif area >= 101 and area <= 199:
+		area = '02'
+	elif area >= 200 and area <= 299:
+		area = '03'
+	elif area >= 300 and area <= 399:
+		area = '04'
+	elif area>= 400:
+		area = '05'
+	return area;	
 # get family member count after parsing (use for RHS survey only)
 def get_rhs_family_member_count(answer_count):
 	count = None

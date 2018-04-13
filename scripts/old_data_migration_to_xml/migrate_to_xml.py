@@ -71,7 +71,7 @@ mapped_excel_path_mapping = {
 	# Pune
 	'1': {
 		'1': os.path.join(root_folder_path, 'FilesToRead', 'MappedExcel_Pune', 'RA_Old_New_QuestionMapping_Parag.xlsx'), # RA
-		'2': os.path.join(root_folder_path, 'FilesToRead', 'MappedExcel_Pune', 'RHS_Old_New_QuestionMapping_Parag.xlsx'), # RHS
+		'2': os.path.join(root_folder_path, 'FilesToRead', 'MappedExcel_Pune', 'RHS_Old_New_QuestionMapping_Raghvendra.xlsx'), # RHS    'RHS_Old_New_QuestionMapping_Parag.xlsx'
 		'3': os.path.join(root_folder_path, 'FilesToRead', 'MappedExcel_Pune', 'FF_Old_New_QuestionMapping_Parag.xlsx'), # FF
 	},
 	# PCMC
@@ -104,10 +104,10 @@ survey_xml_value_mapping = {
 	},
 	# RHS
 	'2': { 
-		'xml_root': 'aJWGCEUXe4DcsJzETwMptL',
-		'xml_root_attr_id': 'aJWGCEUXe4DcsJzETwMptL',
-		'xml_root_attr_version': 'vcsF9qpeD5gsrFXsRVkbws',
-		'formhub_uuid': 'b12051466e154c5396876c33b634bd0b',
+		'xml_root': 'a2NE2CCR6izXK22H2Aa9Kr',
+		'xml_root_attr_id': 'a2NE2CCR6izXK22H2Aa9Kr',
+		'xml_root_attr_version': 'vbqmmSmBxRL4Yi6CnZKEMw',
+		'formhub_uuid': 'c323c30949394726ae99e5116cebde54',
 	},
 	# FF
 	'3': {

@@ -10,63 +10,140 @@ import copy
 from common import *
 
 # dictionary use to set and export data into xml
+#Form number 102
 gl_rhs_xml_dict = {
-	'formhub' : {
-		'uuid' : None
+	"__version__": "vbqmmSmBxRL4Yi6CnZKEMw",
+	"_submission_time": None,
+    "_status": None,
+    "_submitted_by": None,
+    "_xform_id_string":"a2NE2CCR6izXK22H2Aa9Kr",
+    "start":None,
+    "end":None,
+    "admin_ward": None,
+    "slum_name": None,
+    "Date_of_survey":None,
+    "Name_s_of_the_surveyor_s": None,
+    "Household_number": None,
+    "Type_of_structure_occupancy": None,
+    "Type_of_unoccupied_house": None,
+    "Parent_household_number": None,
+    "group_og5bx85": {
+      "Full_name_of_the_head_of_the_household":None,
+      "Type_of_survey": None
+    },
+    "group_el9cl08": {
+      "Enter_the_10_digit_mobile_number": None,
+      "Aadhar_number": None,
+      "Number_of_household_members": None,
+      "Do_you_have_any_girl_child_chi": None,
+      "How_many": None,
+      "Type_of_structure_of_the_house": None,
+      "Ownership_status_of_the_house": None,
+      "House_area_in_sq_ft": None,
+      "Type_of_water_connection": None,
+      "Facility_of_solid_waste_collection": None,
+      "Does_any_household_m_n_skills_given_below": None
+    },
+  "group_oi8ts04": {
+      "Have_you_applied_for_individua": None,
+      "Type_of_SBM_toilets": None,
+      "How_many_installments_have_you": None,
+      "When_did_you_receive_ur_first_installment": None,
+      "When_did_you_receive_r_second_installment": None,
+      "When_did_you_receive_ur_third_installment": None,
+      "If_built_by_contract_ow_satisfied_are_you": None,
+      "Status_of_toilet_under_SBM": None,
+      "What_was_the_cost_in_to_build_the_toilet": None,
+      "C1": None,
+      "C2": None,
+      "C3": None,
+      "C4": None,
+      "C5": None,
+      "Current_place_of_defecation": None,
+      "Is_there_availabilit_onnect_to_the_toilet": None,
+      "Are_you_interested_in_an_indiv": None,
+      "What_kind_of_toilet_would_you_like": None,
+      "Under_what_scheme_wo_r_toilet_to_be_built": None,
+      "If_yes_why": None,
+      "If_no_why": None,
+      "What_is_the_toilet_connected_to": None,
+      "Who_all_use_toilets_in_the_hou": None,
+      "Reason_for_not_using_toilet": None,
+      "OD1": None
+    },
+    "Enter_household_number_again": None,
+	"meta": {
+		"instanceID": None
 	},
-	'start' : None,
-	'end' : None,
-	'group_ce0hf58' : {
-		'city' : None,
-		'admin_ward' : None,
-		'slum_name' : None,
-		'date_of_rhs' : None,
-		'name_of_surveyor_who_collected_rhs_data' : None,
-		'house_no' : None,
-		'Type_of_structure_occupancy' : None
-	},
-	'group_ye18c77' : {
-		'group_ud4em45' : {
-			'what_is_the_full_name_of_the_family_head_' : None,
-			'mobile_number' : None,
-			'adhar_card_number' : None
-		},
-		'group_yw8pj39' : {
-			'what_is_the_structure_of_the_house' : None,
-			'what_is_the_ownership_status_of_the_house' : None,
-			'number_of_family_members' : None,
-			'Do_you_have_a_girl_child_under' : None,
-			'if_yes_how_many_' : None,
-			'house_area_in_sq_ft' : None,
-			'Current_place_of_defecation_toilet' : None,
-			'does_any_member_of_your_family_go_for_open_defecation_' : None,
-			'where_the_individual_toilet_is_connected_to_' : None,
-			'type_of_water_connection' : None,
-			'facility_of_waste_collection' : None,
-			'Are_you_interested_in_individu' : None,
-			'if_yes_why_' : None,
-			'if_no_why_' : None,
-			'type_of_toilet_preference' : None,
-			'Have_you_applied_for_indiviual' : None,
-			'How_many_installements_have_yo' : None,
-			'when_did_you_receive_the_first_installment_date' : None,
-			'when_did_you_receive_the_second_installment_date' : None,
-			'what_is_the_status_of_toilet_under_sbm_' : None,
-			'Does_any_family_members_has_co' : None
-		},
-	},
-	'__version__' : None,
-	'meta' : {
-		'instanceID' : None
+	"formhub": {
+		"uuid": "c323c30949394726ae99e5116cebde54"
 	}
 }
 
+
+# gl_rhs_xml_dict = {
+#	'formhub' : {
+#		'uuid' : None
+#	},
+#	'start' : None,
+#	'end' : None,
+#	'group_ce0hf58' : {
+#		'city' : None,
+#		'admin_ward' : None,
+#		'slum_name' : None,
+#		'date_of_rhs' : None,
+#		'name_of_surveyor_who_collected_rhs_data' : None,
+#		'house_no' : None,
+#		'Type_of_structure_occupancy' : None
+#	},
+#	'group_ye18c77' : {
+#		'group_ud4em45' : {
+#			'what_is_the_full_name_of_the_family_head_' : None,
+#			'mobile_number' : None,
+##			'adhar_card_number' : None
+#		},
+#		'group_yw8pj39' : {
+#			'what_is_the_structure_of_the_house' : None,
+#			'what_is_the_ownership_status_of_the_house' : None,
+#			'number_of_family_members' : None,
+#			'Do_you_have_a_girl_child_under' : None,
+#			'if_yes_how_many_' : None,
+#			'house_area_in_sq_ft' : None,
+#			'Current_place_of_defecation_toilet' : None,
+#			'does_any_member_of_your_family_go_for_open_defecation_' : None,
+#			'where_the_individual_toilet_is_connected_to_' : None,
+#			'type_of_water_connection' : None,
+#			'facility_of_waste_collection' : None,
+#			'Are_you_interested_in_individu' : None,
+#			'if_yes_why_' : None,
+#			'if_no_why_' : None,
+#			'type_of_toilet_preference' : None,
+#			'Have_you_applied_for_indiviual' : None,
+#			'How_many_installements_have_yo' : None,
+#			'when_did_you_receive_the_first_installment_date' : None,
+#			'when_did_you_receive_the_second_installment_date' : None,
+#			'what_is_the_status_of_toilet_under_sbm_' : None,
+#			'Does_any_family_members_has_co' : None
+#		},
+#	},
+#	'__version__' : None,
+#	'meta' : {
+#		'instanceID' : None
+#	}
+#}
+# This string is ised for debugging for running the script for selected slum and selected house hold. 
+
+######
+#####To be made empty when running for production
+######
+#run_script_for_selected_slum_household = " and household.slum_id = 36 and household.household_code = '0147' "
+run_script_for_selected_slum_household = ""
 ## RHS survey queries
 # get list of all household in all slums for survey
 qry_rhs_slum_household_survey_list = "select distinct household.slum_id, household.household_code from survey_fact f \
 join slum_data_household household on household.id = f.object_id \
 join survey_survey s on s.id = f.survey_id join survey_project p on p.id = s.project_id \
-where s.id = %s and p.id = %s and f.content_type_id = 27 \
+where s.id = %s and p.id = %s and f.content_type_id = 27 " + run_script_for_selected_slum_household + " \
 order by household.slum_id, household.household_code asc"
 
 # get list of all question and answer for all household in slum
@@ -88,19 +165,19 @@ where s.id = %s and p.id = %s and f.content_type_id = 27 and household.slum_id= 
 qry_rhs_common_slum_list = "(select distinct household.slum_id from survey_fact f \
 join slum_data_household household on household.id = f.object_id \
 join survey_survey s on s.id = f.survey_id join survey_project p on p.id = s.project_id \
-where s.id = %s and p.id = %s and f.content_type_id = 27 order by household.slum_id asc) \
+where s.id = %s and p.id = %s and f.content_type_id = 27 " + run_script_for_selected_slum_household + " order by household.slum_id asc) \
 INTERSECT ALL \
 (select distinct household.slum_id from survey_fact f \
 join slum_data_household household on household.id = f.object_id \
 join survey_survey s on s.id = f.survey_id join survey_project p on p.id = s.project_id \
-where s.id = %s and p.id = %s and f.content_type_id = 27 \
+where s.id = %s and p.id = %s and f.content_type_id = 27 " + run_script_for_selected_slum_household + "  \
 order by household.slum_id asc)"
 
 # get list of all household in all slums for second survey
 qry_rhs_master_slum_household_survey_list = "select distinct household.slum_id, household.household_code from survey_fact f \
 join slum_data_household household on household.id = f.object_id \
 join survey_survey s on s.id = f.survey_id join survey_project p on p.id = s.project_id \
-where s.id = %s and p.id = %s and f.content_type_id = 27 \
+where s.id = %s and p.id = %s and f.content_type_id = 27  " + run_script_for_selected_slum_household + "  \
 order by household.slum_id, household.household_code asc"
 
 # get list of all question and answer for all household in slum from second survey
@@ -118,7 +195,7 @@ join slum_data_household household on household.id = f.object_id \
 where s.id = %s and p.id = %s and f.content_type_id = 27 and household.slum_id= %s order by household.household_code, sdf.weight asc)"
 
 # path of survey excel file(xls) to read option and xml keys
-RHS_excelFile = os.path.join(root_folder_path, 'FilesToRead', 'RHS.xls')
+RHS_excelFile = os.path.join(root_folder_path, 'FilesToRead', 'form_RHS_Pune.xls')   # RHS.xls
 
 # create rapid household survey xml
 def create_rhs_xml(options):
@@ -202,7 +279,7 @@ def create_rhs_xml(options):
 		# remove common survey from second survey list
 		for slum_id in common_slum_id_list:
 			del master_slum_household_list[slum_id]
-	
+		
 		#print("fetch master slum household list")
 		#print('master_slum_household_list  ',master_slum_household_list.keys())
 	
@@ -213,7 +290,7 @@ def create_rhs_xml(options):
 	#print("fetch slum household list")
 	#print(new_slum_household_list)
 	write_log("fetch household slum survey list")
-	
+
 	rhs_group['New'] = new_slum_household_list
 	
 	total_slum = 0
@@ -296,132 +373,142 @@ def create_rhs_xml(options):
 							# set dictionary to create RHS xml
 							rhs_xml_dict['formhub']['uuid'] = xml_formhub_uuid
 							
-							rhs_xml_dict['start'] = get_answer('start', fact)
-							rhs_xml_dict['end'] = get_answer('end', fact)
+							#rhs_xml_dict['start'] = get_answer('start', fact)
+							#rhs_xml_dict['end'] = get_answer('end', fact)
+							
+							#Direct information without group
+							rhs_xml_dict['admin_ward'] = admin_ward
+							rhs_xml_dict['slum_name'] = slum_code
+							date_of_rhs = get_answer('Date_of_survey', fact)
+							if date_of_rhs:
+								rhs_xml_dict['Date_of_survey'] = get_formatted_data(date_of_rhs)
 							
 							#Administrative Information
-							rhs_xml_dict['group_ce0hf58']['city'] = city
-							rhs_xml_dict['group_ce0hf58']['admin_ward'] = admin_ward
-							rhs_xml_dict['group_ce0hf58']['slum_name'] = slum_code
-							
-							date_of_rhs = get_answer('date_of_rhs', fact)
-							if date_of_rhs:
-								rhs_xml_dict['group_ce0hf58']['date_of_rhs'] = get_formatted_data(date_of_rhs)
-							
-							rhs_xml_dict['group_ce0hf58']['name_of_surveyor_who_collected_rhs_data'] = get_answer('name_of_surveyor_who_collected_rhs_data', fact)
-							rhs_xml_dict['group_ce0hf58']['house_no'] = get_answer('house_no', fact)
+							#rhs_xml_dict['group_ce0hf58']['city'] = city
+							#rhs_xml_dict['group_ce0hf58']['admin_ward'] = admin_ward
+							#rhs_xml_dict['group_ce0hf58']['slum_name'] = slum_code
+
+							rhs_xml_dict['Name_s_of_the_surveyor_s'] = get_answer('Name_s_of_the_surveyor_s', fact)
+							rhs_xml_dict['Household_number'] = get_answer('Household_number', fact)
 							
 							Type_of_structure_occupancy = get_answer('Type_of_structure_occupancy', fact)
+							#makeitastring = ','.join(map(str, fact))
+							#write_log('Fact value:' + fact[440])
+							#write_log('Type_of_structure_occupancy value:' + Type_of_structure_occupancy)
 							if Type_of_structure_occupancy:
-								rhs_xml_dict['group_ce0hf58']['Type_of_structure_occupancy'] = Type_of_structure_occupancy
-							
+								rhs_xml_dict['Type_of_structure_occupancy'] = Type_of_structure_occupancy
+							#write_log('After If condition Type_of_structure_occupancy value:' + rhs_xml_dict['Type_of_structure_occupancy'])
+							if Type_of_structure_occupancy == '02':
+								rhs_xml_dict['Type_of_unoccupied_house'] = get_answer_type_of_unaccopied_house('Type_of_unoccupied_house', fact)
 							#print('process - Administrative Information')
 							#write_log('process - Administrative Information')
 							
 							#Household Information - Personal Information
-							if Type_of_structure_occupancy == '01' or Type_of_structure_occupancy == '03':
-								rhs_xml_dict['group_ye18c77']['group_ud4em45']['what_is_the_full_name_of_the_family_head_'] = get_answer('what_is_the_full_name_of_the_family_head_', fact)
-								rhs_xml_dict['group_ye18c77']['group_ud4em45']['mobile_number'] = get_answer('mobile_number', fact)
-								rhs_xml_dict['group_ye18c77']['group_ud4em45']['adhar_card_number'] = get_answer('adhar_card_number', fact)
+							if Type_of_structure_occupancy == '01':
+								rhs_xml_dict['group_og5bx85']['Full_name_of_the_head_of_the_household'] = get_answer('Full_name_of_the_head_of_the_household', fact)
+								rhs_xml_dict['group_og5bx85']['Type_of_survey'] = '01'
+								rhs_xml_dict['group_el9cl08']['Enter_the_10_digit_mobile_number'] = get_answer('Enter_the_10_digit_mobile_number', fact)
+								rhs_xml_dict['group_el9cl08']['Aadhar_number'] = get_answer('Aadhar_number', fact)
 								
 							#print('process - Household Information - Personal Information')
 							#write_log('process - Household Information - Personal Information')
 							
 							#Household Information - General Information
 							if Type_of_structure_occupancy == '01':
-								what_is_the_structure_of_the_house = get_answer('what_is_the_structure_of_the_house', fact)
+								what_is_the_structure_of_the_house = get_answer('Type_of_structure_of_the_house', fact)
 								if what_is_the_structure_of_the_house:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['what_is_the_structure_of_the_house'] = what_is_the_structure_of_the_house
+									rhs_xml_dict['group_el9cl08']['Type_of_structure_of_the_house'] = what_is_the_structure_of_the_house
 								
-								what_is_the_ownership_status_of_the_house = get_answer('what_is_the_ownership_status_of_the_house', fact)
+								what_is_the_ownership_status_of_the_house = get_answer('Ownership_status_of_the_house', fact)
 								if what_is_the_ownership_status_of_the_house:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['what_is_the_ownership_status_of_the_house'] = what_is_the_ownership_status_of_the_house
+									rhs_xml_dict['group_el9cl08']['Ownership_status_of_the_house'] = what_is_the_ownership_status_of_the_house
 								
-								number_of_family_members = get_answer('number_of_family_members', fact)
+								number_of_family_members = get_answer('Number_of_household_members', fact)
 								try:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['number_of_family_members'] = get_rhs_family_member_count(number_of_family_members)
+									rhs_xml_dict['group_el9cl08']['Number_of_household_members'] = get_rhs_family_member_count(number_of_family_members)
 								except:
 									#unprocess_records[str(slum)].append([str(household), "unable to process number of family member for answer =>"+(number_of_family_members if not isinstance(number_of_family_members, list) else ','.join(number_of_family_members))])
 									pass
-								
-								Do_you_have_a_girl_child_under = get_answer('Do_you_have_a_girl_child_under', fact)
+								write_log('number_of_family_members:' + str(number_of_family_members))
+								Do_you_have_a_girl_child_under = get_answer('Do_you_have_any_girl_child_chi', fact)
 								if Do_you_have_a_girl_child_under:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['Do_you_have_a_girl_child_under'] = Do_you_have_a_girl_child_under
+									rhs_xml_dict['group_el9cl08']['Do_you_have_any_girl_child_chi'] = Do_you_have_a_girl_child_under
 									
 									if Do_you_have_a_girl_child_under == '01':
-										rhs_xml_dict['group_ye18c77']['group_yw8pj39']['if_yes_how_many_'] = int(get_answer('if_yes_how_many_', fact))
+										rhs_xml_dict['group_el9cl08']['How_many'] = int(get_answer('How_many', fact))
 								
-								house_area_in_sq_ft = get_answer('house_area_in_sq_ft', fact)
+								house_area_in_sq_ft = get_answer('House_area_in_sq_ft', fact)
 								try:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['house_area_in_sq_ft'] = get_rhs_area_in_squar_feet(house_area_in_sq_ft)
+									rhs_xml_dict['group_el9cl08']['House_area_in_sq_ft'] = get_rhs_area_option_from_squar_feet(house_area_in_sq_ft)
 								except:
 									#unprocess_records[str(slum)].append([str(household), "unable to process house area in sq ft for answer =>"+(house_area_in_sq_ft if not isinstance(house_area_in_sq_ft, list) else ','.join(house_area_in_sq_ft))])
 									pass
-								
-								Current_place_of_defecation_toilet = get_answer('Current_place_of_defecation_toilet', fact)
+								write_log('option for house_area_in_sq_ft:' + str(house_area_in_sq_ft))
+								Current_place_of_defecation_toilet = get_answer('Current_place_of_defecation', fact)
 								if Current_place_of_defecation_toilet:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['Current_place_of_defecation_toilet'] = Current_place_of_defecation_toilet
+									rhs_xml_dict['group_oi8ts04']['Current_place_of_defecation'] = Current_place_of_defecation_toilet
 								
-								does_any_member_of_your_family_go_for_open_defecation_ = get_answer('does_any_member_of_your_family_go_for_open_defecation_', fact)
-								if does_any_member_of_your_family_go_for_open_defecation_:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['does_any_member_of_your_family_go_for_open_defecation_'] = does_any_member_of_your_family_go_for_open_defecation_
+								#does_any_member_of_your_family_go_for_open_defecation_ = get_answer('does_any_member_of_your_family_go_for_open_defecation_', fact)
+								#if does_any_member_of_your_family_go_for_open_defecation_:
+								#	rhs_xml_dict['group_ye18c77']['group_yw8pj39']['does_any_member_of_your_family_go_for_open_defecation_'] = does_any_member_of_your_family_go_for_open_defecation_
 								
 								if Current_place_of_defecation_toilet and (Current_place_of_defecation_toilet == '01' or Current_place_of_defecation_toilet == '02'):
-									where_the_individual_toilet_is_connected_to_ = get_answer('where_the_individual_toilet_is_connected_to_', fact)
+									where_the_individual_toilet_is_connected_to_ = get_answer('What_is_the_toilet_connected_to', fact)
 									if where_the_individual_toilet_is_connected_to_:
-										rhs_xml_dict['group_ye18c77']['group_yw8pj39']['where_the_individual_toilet_is_connected_to_'] = where_the_individual_toilet_is_connected_to_
+										rhs_xml_dict['group_oi8ts04']['What_is_the_toilet_connected_to'] = where_the_individual_toilet_is_connected_to_
 								
-								type_of_water_connection = get_answer('type_of_water_connection', fact)
+								type_of_water_connection = get_answer('Type_of_water_connection', fact)
 								if type_of_water_connection:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['type_of_water_connection'] = type_of_water_connection
+									rhs_xml_dict['group_el9cl08']['Type_of_water_connection'] = type_of_water_connection
 								
-								facility_of_waste_collection = get_answer('facility_of_waste_collection', fact)
+								facility_of_waste_collection = get_answer('Facility_of_solid_waste_collection', fact)
 								if facility_of_waste_collection:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['facility_of_waste_collection'] = facility_of_waste_collection
+									rhs_xml_dict['group_el9cl08']['Facility_of_solid_waste_collection'] = facility_of_waste_collection
 								
 								if Current_place_of_defecation_toilet and (Current_place_of_defecation_toilet != '01' or Current_place_of_defecation_toilet != '02'):
-									Are_you_interested_in_individu = get_answer('Are_you_interested_in_individu', fact)
+									Are_you_interested_in_individu = get_answer('Are_you_interested_in_an_indiv', fact)
 									if Are_you_interested_in_individu:
-										rhs_xml_dict['group_ye18c77']['group_yw8pj39']['Are_you_interested_in_individu'] = Are_you_interested_in_individu
+										rhs_xml_dict['group_oi8ts04']['Are_you_interested_in_an_indiv'] = Are_you_interested_in_individu
 										
 										if Are_you_interested_in_individu == '01':
-											if_yes_why_ = get_answer('if_yes_why_', fact)
+											if_yes_why_ = get_answer('If_yes_why', fact)
 											if if_yes_why_:
-												rhs_xml_dict['group_ye18c77']['group_yw8pj39']['if_yes_why_'] = if_yes_why_
+												rhs_xml_dict['group_oi8ts04']['If_yes_why'] = if_yes_why_
 											
 										if Are_you_interested_in_individu == '02':
-											if_no_why_ = get_answer('if_no_why_', fact)
+											if_no_why_ = get_answer('If_no_why', fact)
 											if if_no_why_:
-												rhs_xml_dict['group_ye18c77']['group_yw8pj39']['if_no_why_'] = if_no_why_
+												rhs_xml_dict['group_oi8ts04']['If_no_why'] = if_no_why_
 										
-										if Are_you_interested_in_individu == '01' and city != 3789:
-											type_of_toilet_preference = get_answer('type_of_toilet_preference', fact)
+										if Are_you_interested_in_individu == '01':
+											type_of_toilet_preference = get_answer('What_kind_of_toilet_would_you_like', fact)
 											if type_of_toilet_preference:
-												rhs_xml_dict['group_ye18c77']['group_yw8pj39']['type_of_toilet_preference'] = type_of_toilet_preference
+												rhs_xml_dict['group_oi8ts04']['What_kind_of_toilet_would_you_like'] = type_of_toilet_preference
 								
-								if Current_place_of_defecation_toilet and Current_place_of_defecation_toilet != '01':
-									Have_you_applied_for_indiviual = get_answer('Have_you_applied_for_indiviual', fact)
-									if Have_you_applied_for_indiviual:
-										rhs_xml_dict['group_ye18c77']['grup_yw8pj39']['Have_you_applied_for_indiviual'] = Have_you_applied_for_indiviual
+								#if Current_place_of_defecation_toilet and Current_place_of_defecation_toilet != '01':
+								#	Have_you_applied_for_indiviual = get_answer('Have_you_applied_for_indiviual', fact)
+								#	if Have_you_applied_for_indiviual:
+								#		rhs_xml_dict['group_ye18c77']['grup_yw8pj39']['Have_you_applied_for_indiviual'] = Have_you_applied_for_indiviual
 										
-										if Have_you_applied_for_indiviual == '01':
-											How_many_installements_have_yo = get_answer('How_many_installements_have_yo', fact)
-											if How_many_installements_have_yo:
-												rhs_xml_dict['group_ye18c77']['group_yw8pj39']['How_many_installements_have_yo'] = How_many_installements_have_yo
-												
-												if How_many_installements_have_yo == '02' or How_many_installements_have_yo == '03':
-													rhs_xml_dict['group_ye18c77']['group_yw8pj39']['when_did_you_receive_the_first_installment_date'] = get_answer('when_did_you_receive_the_first_installment_date', fact)
-												
-												if How_many_installements_have_yo == '03':
-													rhs_xml_dict['group_ye18c77']['group_yw8pj39']['when_did_you_receive_the_second_installment_date'] = get_answer('when_did_you_receive_the_second_installment_date', fact)
-											
-											what_is_the_status_of_toilet_under_sbm_ = get_answer('what_is_the_status_of_toilet_under_sbm_', fact)
-											if what_is_the_status_of_toilet_under_sbm_:
-												rhs_xml_dict['group_ye18c77']['group_yw8pj39']['what_is_the_status_of_toilet_under_sbm_'] = what_is_the_status_of_toilet_under_sbm_
+								#		if Have_you_applied_for_indiviual == '01':
+								#			How_many_installements_have_yo = get_answer('How_many_installements_have_yo', fact)
+								#			if How_many_installements_have_yo:
+								#				rhs_xml_dict['group_ye18c77']['group_yw8pj39']['How_many_installements_have_yo'] = How_many_installements_have_yo
+								#				
+								#				if How_many_installements_have_yo == '02' or How_many_installements_have_yo == '03':
+								#					rhs_xml_dict['group_ye18c77']['group_yw8pj39']['when_did_you_receive_the_first_installment_date'] = get_answer('when_did_you_receive_the_first_installment_date', fact)
+								#				
+								#				if How_many_installements_have_yo == '03':
+								#					rhs_xml_dict['group_ye18c77']['group_yw8pj39']['when_did_you_receive_the_second_installment_date'] = get_answer('when_did_you_receive_the_second_installment_date', fact)
+								#			
+								#			what_is_the_status_of_toilet_under_sbm_ = get_answer('what_is_the_status_of_toilet_under_sbm_', fact)
+								#			if what_is_the_status_of_toilet_under_sbm_:
+								#				rhs_xml_dict['group_ye18c77']['group_yw8pj39']['what_is_the_status_of_toilet_under_sbm_'] = what_is_the_status_of_toilet_under_sbm_
+								#
 								
-								Does_any_family_members_has_co = get_answer('Does_any_family_members_has_co', fact)
-								if Does_any_family_members_has_co:
-									rhs_xml_dict['group_ye18c77']['group_yw8pj39']['Does_any_family_members_has_co'] = Does_any_family_members_has_co
+								#Does_any_family_members_has_co = get_answer('Does_any_family_members_has_co', fact)
+								#if Does_any_family_members_has_co:
+								#	rhs_xml_dict['group_ye18c77']['group_yw8pj39']['Does_any_family_members_has_co'] = Does_any_family_members_has_co
 							
 							#print('process - Household Information - General Information')
 							#write_log('process - Household Information - General Information')

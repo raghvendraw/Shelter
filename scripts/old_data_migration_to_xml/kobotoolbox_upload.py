@@ -111,7 +111,7 @@ def upload_to_kobotoolbox(survey_photo_mapping, select_option):
 	
 	
 	# use threading to upload file faster
-	pool_obj = Pool(processes=5)
+	pool_obj = Pool(processes=30)
 	
 	response_obj = pool_obj.map(upload_xml, upload_option)
 	
