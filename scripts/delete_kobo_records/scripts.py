@@ -3,14 +3,18 @@
     To run include the folder in sys path
 
     import sys
-    sys.path.insert(0, 'scripts/delete_kobo_records/')
+    sys.path.insert(0, 'scripts/')
+	delete_kobo_records
 '''
 
-from django.conf import settings
+#from django.conf import settings
+import sys
+sys.path.insert(0,'E:\\Projects\\Shelter\\Code\\Shelter\\scripts\\old_data_migration_to_xml\\')
+import local_settings as settings
 import json
 import requests
 from multiprocessing import Pool
-kobo_form = 41
+kobo_form = 102
 headers={}
 headers["Authorization"] = settings.KOBOCAT_TOKEN
 
@@ -41,3 +45,4 @@ def delete_record(records):
 
         print(' deleted for '+str(delete_record_id) + ' with response '+str(objresponseDeleted))
     return objresponseDeleted
+#fetch_records(kobo_form)

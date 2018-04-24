@@ -136,7 +136,8 @@ gl_rhs_xml_dict = {
 ######
 #####To be made empty when running for production
 ######
-#run_script_for_selected_slum_household = " and household.slum_id = 36 and household.household_code = '0147' "
+#run_script_for_selected_slum_household = " and household.slum_id = 556 "
+#run_script_for_selected_slum_household = " and household.slum_id = 556 and household.household_code = '0099' "
 run_script_for_selected_slum_household = ""
 ## RHS survey queries
 # get list of all household in all slums for survey
@@ -306,6 +307,7 @@ def create_rhs_xml(options):
 	total_process_house = 0
 	progess_counter = 0
 	
+		
 	# check for each survey into group
 	for rhs_key, slum_household_list in rhs_group.items():
 		#check key value
@@ -351,16 +353,52 @@ def create_rhs_xml(options):
 					#print(household_fact)
 					total_process_house += len(household_fact)
 					
-					# set progress bar
-					show_progress_bar(progess_counter, total_process_house)
 					
+					
+					#For finding the average area for slum to be used if house hold has area as 0
+					slum_has_02_current_place_for_defecation_response = False
+					total_area_for_slum = 0
+					total_household_count_for_average = 0
+					average_area_for_slum = 0
+					average_area_option_for_slum = '01'
+					house_hold_count = 0;
+					for household in household_list:
+						fact = household_fact[household]
+						house_area_in_sq_ft = get_answer('House_area_in_sq_ft', fact)
+						current_place_for_defecation = get_answer('Current_place_of_defecation', fact)
+						if current_place_for_defecation == '02' or (type(current_place_for_defecation) == list and '02' in current_place_for_defecation):
+							slum_has_02_current_place_for_defecation_response = True;
+						try:
+							house_area_in_sq_ft = get_rhs_area_in_squar_feet(house_area_in_sq_ft)
+							if type(house_area_in_sq_ft) == list:
+								house_area_in_sq_ft = house_area_in_sq_ft[0]
+							#print('houise hold wise area:', house_area_in_sq_ft) 
+							if house_area_in_sq_ft != 0:
+								total_area_for_slum = total_area_for_slum + house_area_in_sq_ft
+								total_household_count_for_average += 1
+						except:
+							#unprocess_records[str(slum)].append([str(household), "unable to process house area in sq ft for answer =>"+(house_area_in_sq_ft if not isinstance(house_area_in_sq_ft, list) else ','.join(house_area_in_sq_ft))])
+							pass
+					#print('total_area_for_slum:' , total_area_for_slum)		
+					#print('total_household_count_for_average:' , total_household_count_for_average)		
+					
+					if total_household_count_for_average !=0:
+						average_area_for_slum = total_area_for_slum / total_household_count_for_average	
+					average_area_option_for_slum = get_rhs_area_option_from_squar_feet(average_area_for_slum)
+					write_log('Average area option for Slum:' + str(average_area_option_for_slum))
+					
+					
+					
+					# set progress bar
+					#show_progress_bar(progess_counter, total_process_house, total_slum, len(slum_code_list), 'Slum ' + slum_code)
+					print('\nSlum counter:',total_slum)
 					# process each household in slum
 					for household in household_list:
 						total_process += 1
 						
 						try:
 							#print("proocessing data for household - %s in slum - %s" % (household, slum))
-							#write_log("proocessing data for household - %s in slum - %s" % (household, str(slum)))
+							write_log("proocessing data for household - %s in slum - %s" % (household, str(slum)))
 							
 							#get question and its answers for household
 							fact = household_fact[household]
@@ -389,12 +427,15 @@ def create_rhs_xml(options):
 							#rhs_xml_dict['group_ce0hf58']['slum_name'] = slum_code
 
 							rhs_xml_dict['Name_s_of_the_surveyor_s'] = get_answer('Name_s_of_the_surveyor_s', fact)
-							rhs_xml_dict['Household_number'] = get_answer('Household_number', fact)
+							rhs_xml_dict['Household_number'] = household
+							rhs_xml_dict['Parent_household_number'] = get_answer('Parent_household_number', fact)
 							
 							Type_of_structure_occupancy = get_answer('Type_of_structure_occupancy', fact)
+							if Type_of_structure_occupancy and type(Type_of_structure_occupancy) is list:
+								Type_of_structure_occupancy = Type_of_structure_occupancy[0]
 							#makeitastring = ','.join(map(str, fact))
-							#write_log('Fact value:' + fact[440])
-							#write_log('Type_of_structure_occupancy value:' + Type_of_structure_occupancy)
+							#write_log('Fact value:' + str(fact[440]))
+							write_log('Type_of_structure_occupancy value:' + str(Type_of_structure_occupancy))
 							if Type_of_structure_occupancy:
 								rhs_xml_dict['Type_of_structure_occupancy'] = Type_of_structure_occupancy
 							#write_log('After If condition Type_of_structure_occupancy value:' + rhs_xml_dict['Type_of_structure_occupancy'])
@@ -402,13 +443,34 @@ def create_rhs_xml(options):
 								rhs_xml_dict['Type_of_unoccupied_house'] = get_answer_type_of_unaccopied_house('Type_of_unoccupied_house', fact)
 							#print('process - Administrative Information')
 							#write_log('process - Administrative Information')
-							
+							#********************************This line to be deleted after testing***********************************************
+							full_name_of_head_of_household = get_answer('Full_name_of_the_head_of_the_household', fact)
+							if full_name_of_head_of_household == 'L H' or full_name_of_head_of_household == 'lh' or full_name_of_head_of_household == 'L.H.' or full_name_of_head_of_household == 'l.h.':
+								full_name_of_head_of_household = 'not giving information'
+							rhs_xml_dict['group_og5bx85']['Full_name_of_the_head_of_the_household'] = full_name_of_head_of_household
+							#********************************This line to be deleted after testing***********************************************
 							#Household Information - Personal Information
 							if Type_of_structure_occupancy == '01':
 								rhs_xml_dict['group_og5bx85']['Full_name_of_the_head_of_the_household'] = get_answer('Full_name_of_the_head_of_the_household', fact)
 								rhs_xml_dict['group_og5bx85']['Type_of_survey'] = '01'
-								rhs_xml_dict['group_el9cl08']['Enter_the_10_digit_mobile_number'] = get_answer('Enter_the_10_digit_mobile_number', fact)
-								rhs_xml_dict['group_el9cl08']['Aadhar_number'] = get_answer('Aadhar_number', fact)
+								mobile_number_10_digit = get_answer('Enter_the_10_digit_mobile_number', fact)
+								if mobile_number_10_digit:
+									if type(mobile_number_10_digit) is list:
+										mobile_number_10_digit = mobile_number_10_digit[0]
+									mobile_number_10_digit = mobile_number_10_digit.replace(', ', '')
+									mobile_number_10_digit = mobile_number_10_digit.replace(' ,', '')
+									mobile_number_10_digit = mobile_number_10_digit.replace(',', '')
+								if mobile_number_10_digit and len(mobile_number_10_digit) == 10 and mobile_number_10_digit.isdigit():
+									rhs_xml_dict['group_el9cl08']['Enter_the_10_digit_mobile_number'] = mobile_number_10_digit
+								aadhar_number_12_digit = get_answer('Aadhar_number', fact)
+								if aadhar_number_12_digit:
+									if type(aadhar_number_12_digit) is list:
+										aadhar_number_12_digit = aadhar_number_12_digit[0]
+									aadhar_number_12_digit = aadhar_number_12_digit.replace(', ', '')
+									aadhar_number_12_digit = aadhar_number_12_digit.replace(' ,', '')
+									aadhar_number_12_digit = aadhar_number_12_digit.replace(',', '')
+								if aadhar_number_12_digit and len(aadhar_number_12_digit) == 12 and aadhar_number_12_digit.isdigit():
+									rhs_xml_dict['group_el9cl08']['Aadhar_number'] = aadhar_number_12_digit
 								
 							#print('process - Household Information - Personal Information')
 							#write_log('process - Household Information - Personal Information')
@@ -422,53 +484,120 @@ def create_rhs_xml(options):
 								what_is_the_ownership_status_of_the_house = get_answer('Ownership_status_of_the_house', fact)
 								if what_is_the_ownership_status_of_the_house:
 									rhs_xml_dict['group_el9cl08']['Ownership_status_of_the_house'] = what_is_the_ownership_status_of_the_house
+								write_log('Ownership_status_of_the_house:' + str(what_is_the_ownership_status_of_the_house))
 								
 								number_of_family_members = get_answer('Number_of_household_members', fact)
 								try:
-									rhs_xml_dict['group_el9cl08']['Number_of_household_members'] = get_rhs_family_member_count(number_of_family_members)
+									number_of_family_members = get_rhs_family_member_count(number_of_family_members)
+									if int(number_of_family_members) > 20:
+										number_of_family_members = 5
+									rhs_xml_dict['group_el9cl08']['Number_of_household_members'] = number_of_family_members
 								except:
 									#unprocess_records[str(slum)].append([str(household), "unable to process number of family member for answer =>"+(number_of_family_members if not isinstance(number_of_family_members, list) else ','.join(number_of_family_members))])
 									pass
 								write_log('number_of_family_members:' + str(number_of_family_members))
 								Do_you_have_a_girl_child_under = get_answer('Do_you_have_any_girl_child_chi', fact)
 								if Do_you_have_a_girl_child_under:
+									if type(Do_you_have_a_girl_child_under) == list:
+										Do_you_have_a_girl_child_under = Do_you_have_a_girl_child_under[0];
 									rhs_xml_dict['group_el9cl08']['Do_you_have_any_girl_child_chi'] = Do_you_have_a_girl_child_under
 									
 									if Do_you_have_a_girl_child_under == '01':
-										rhs_xml_dict['group_el9cl08']['How_many'] = int(get_answer('How_many', fact))
+										number_of_girl_child_under_18 = int(get_answer('How_many', fact))
+										#If the total member count is less than number of girl chile greater than 18 (this value is reduced to 5 if the value received from survey is greater than 20)
+										#then set number of girl child under 18 to number of members count
+										if number_of_family_members < number_of_girl_child_under_18:
+											number_of_girl_child_under_18 = number_of_family_members
+										if number_of_girl_child_under_18 > 0:	
+											rhs_xml_dict['group_el9cl08']['How_many'] = number_of_girl_child_under_18
 								
 								house_area_in_sq_ft = get_answer('House_area_in_sq_ft', fact)
 								try:
-									rhs_xml_dict['group_el9cl08']['House_area_in_sq_ft'] = get_rhs_area_option_from_squar_feet(house_area_in_sq_ft)
+									house_area_in_sq_ft = get_rhs_area_option_from_squar_feet(house_area_in_sq_ft)
+									if type(house_area_in_sq_ft) == list:
+										house_area_in_sq_ft = house_area_in_sq_ft[0]
+									if house_area_in_sq_ft == 0 or house_area_in_sq_ft == '':
+										house_area_in_sq_ft = average_area_for_slum	
+									rhs_xml_dict['group_el9cl08']['House_area_in_sq_ft'] = house_area_in_sq_ft
 								except:
 									#unprocess_records[str(slum)].append([str(household), "unable to process house area in sq ft for answer =>"+(house_area_in_sq_ft if not isinstance(house_area_in_sq_ft, list) else ','.join(house_area_in_sq_ft))])
 									pass
 								write_log('option for house_area_in_sq_ft:' + str(house_area_in_sq_ft))
+								
+								rhs_xml_dict['group_oi8ts04']['Have_you_applied_for_individua'] = '02'
+								
 								Current_place_of_defecation_toilet = get_answer('Current_place_of_defecation', fact)
+
+								has_04_current_place_for_defecation = False
+								where_the_individual_toilet_is_connected_to_is_07 = False
+								
 								if Current_place_of_defecation_toilet:
+									if type(Current_place_of_defecation_toilet) == list and '04' in Current_place_of_defecation_toilet:
+										has_04_current_place_for_defecation = True
+									if type(Current_place_of_defecation_toilet) == list and '01' in Current_place_of_defecation_toilet:
+										Current_place_of_defecation_toilet = '01'
+										
+									#As per discussion done on 17-Apr-2018 if current place of defecation is 05 and corresponding slum has at least one record with current place of defecation as 02 then set value as '02'
+									if Current_place_of_defecation_toilet == '05' and slum_has_02_current_place_for_defecation_response:
+										Current_place_of_defecation_toilet = '02'
+									if Current_place_of_defecation_toilet == '05' and not slum_has_02_current_place_for_defecation_response:
+										Current_place_of_defecation_toilet = '10'	
+										
 									rhs_xml_dict['group_oi8ts04']['Current_place_of_defecation'] = Current_place_of_defecation_toilet
 								
-								#does_any_member_of_your_family_go_for_open_defecation_ = get_answer('does_any_member_of_your_family_go_for_open_defecation_', fact)
-								#if does_any_member_of_your_family_go_for_open_defecation_:
-								#	rhs_xml_dict['group_ye18c77']['group_yw8pj39']['does_any_member_of_your_family_go_for_open_defecation_'] = does_any_member_of_your_family_go_for_open_defecation_
-								
-								if Current_place_of_defecation_toilet and (Current_place_of_defecation_toilet == '01' or Current_place_of_defecation_toilet == '02'):
-									where_the_individual_toilet_is_connected_to_ = get_answer('What_is_the_toilet_connected_to', fact)
-									if where_the_individual_toilet_is_connected_to_:
-										rhs_xml_dict['group_oi8ts04']['What_is_the_toilet_connected_to'] = where_the_individual_toilet_is_connected_to_
+									#As per discussion done on Tuesday 17-Apr-2018
+									if has_04_current_place_for_defecation:
+										rhs_xml_dict['group_oi8ts04']['OD1'] = '05'
+									
+									write_log('---------------------value for Current_place_of_defecation_toilet:' + str(Current_place_of_defecation_toilet))
+									
+									if (Current_place_of_defecation_toilet == '02' or Current_place_of_defecation_toilet == '03' or Current_place_of_defecation_toilet == '06' or Current_place_of_defecation_toilet == '04'):
+										rhs_xml_dict['group_oi8ts04']['C2'] = '08'
+										
+									if Current_place_of_defecation_toilet == '01':
+										rhs_xml_dict['group_oi8ts04']['C2'] = '01'								
+									
+									if Current_place_of_defecation_toilet == '02':
+										rhs_xml_dict['group_oi8ts04']['C3'] = '09'								
+										
+									if Current_place_of_defecation_toilet == '03':
+										rhs_xml_dict['group_oi8ts04']['C3'] = '10'
+									
+									if Current_place_of_defecation_toilet == '06':
+										rhs_xml_dict['group_oi8ts04']['C3'] = '11'								
+									
+									if Current_place_of_defecation_toilet == '04':
+										rhs_xml_dict['group_oi8ts04']['C3'] = '12'											
+										
+									if (Current_place_of_defecation_toilet == '01' or Current_place_of_defecation_toilet == '02'):
+										where_the_individual_toilet_is_connected_to_ = get_answer('What_is_the_toilet_connected_to', fact)
+										if where_the_individual_toilet_is_connected_to_ == '07':
+											where_the_individual_toilet_is_connected_to_is_07 = True
+											where_the_individual_toilet_is_connected_to_ = '08'
+											rhs_xml_dict['group_oi8ts04']['C3'] = '13'
+										if where_the_individual_toilet_is_connected_to_:
+											rhs_xml_dict['group_oi8ts04']['What_is_the_toilet_connected_to'] = where_the_individual_toilet_is_connected_to_
 								
 								type_of_water_connection = get_answer('Type_of_water_connection', fact)
 								if type_of_water_connection:
 									rhs_xml_dict['group_el9cl08']['Type_of_water_connection'] = type_of_water_connection
+								write_log('Type_of_water_connection:' + str(type_of_water_connection))
 								
 								facility_of_waste_collection = get_answer('Facility_of_solid_waste_collection', fact)
 								if facility_of_waste_collection:
+									if type(facility_of_waste_collection) == list:
+										facility_of_waste_collection = facility_of_waste_collection[0]
 									rhs_xml_dict['group_el9cl08']['Facility_of_solid_waste_collection'] = facility_of_waste_collection
 								
-								if Current_place_of_defecation_toilet and (Current_place_of_defecation_toilet != '01' or Current_place_of_defecation_toilet != '02'):
+								if not where_the_individual_toilet_is_connected_to_is_07 and Current_place_of_defecation_toilet and (Current_place_of_defecation_toilet != '01'):
 									Are_you_interested_in_individu = get_answer('Are_you_interested_in_an_indiv', fact)
 									if Are_you_interested_in_individu:
-										rhs_xml_dict['group_oi8ts04']['Are_you_interested_in_an_indiv'] = Are_you_interested_in_individu
+										if type(Are_you_interested_in_individu) == list:
+											Are_you_interested_in_individu = Are_you_interested_in_individu[0]
+										if Are_you_interested_in_individu == '01' or Are_you_interested_in_individu == '02':
+											rhs_xml_dict['group_oi8ts04']['Are_you_interested_in_an_indiv'] = Are_you_interested_in_individu
+										else:
+											write_log('Are_you_interested_in_an_indiv:' + Are_you_interested_in_individu)
 										
 										if Are_you_interested_in_individu == '01':
 											if_yes_why_ = get_answer('If_yes_why', fact)
@@ -484,7 +613,12 @@ def create_rhs_xml(options):
 											type_of_toilet_preference = get_answer('What_kind_of_toilet_would_you_like', fact)
 											if type_of_toilet_preference:
 												rhs_xml_dict['group_oi8ts04']['What_kind_of_toilet_would_you_like'] = type_of_toilet_preference
+												if type_of_toilet_preference == '05' and (Are_you_interested_in_individu == '01' or Are_you_interested_in_individu == '02') and (if_yes_why_ == '' and if_no_why_ == ''):
+													rhs_xml_dict['group_oi8ts04']['If_yes_why'] = '08'
+													rhs_xml_dict['group_oi8ts04']['If_no_why'] = '08'
 								
+								if rhs_xml_dict['group_oi8ts04']['OD1'] != '05':
+									rhs_xml_dict['group_oi8ts04']['OD1'] = '01'	
 								#if Current_place_of_defecation_toilet and Current_place_of_defecation_toilet != '01':
 								#	Have_you_applied_for_indiviual = get_answer('Have_you_applied_for_indiviual', fact)
 								#	if Have_you_applied_for_indiviual:
@@ -512,6 +646,8 @@ def create_rhs_xml(options):
 							
 							#print('process - Household Information - General Information')
 							#write_log('process - Household Information - General Information')
+							
+							rhs_xml_dict['Enter_household_number_again'] = household
 							
 							rhs_xml_dict['__version__'] = xml_root_attr_version
 							
@@ -547,7 +683,7 @@ def create_rhs_xml(options):
 							pass
 							
 						progess_counter += 1
-						show_progress_bar(progess_counter, total_process_house)
+						show_progress_bar(progess_counter, total_process_house, total_slum, len(slum_code_list), 'Slum ' + slum_code)
 					#break;
 				else:
 					unprocess_slum += 1

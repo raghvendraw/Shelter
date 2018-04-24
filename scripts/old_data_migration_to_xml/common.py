@@ -849,12 +849,12 @@ def get_ff_photo(xml_key, fact_dict, download_folder_path):
 
 
 # display progress
-def show_progress_bar (iteration, total_count, status_for = ''):
+def show_progress_bar (iteration, total_count,completed_slum,total_slums, status_for = ''):
 	prefix = status_for +' \t Progress status:'
 	suffix = 'Completed'
 	decimal_length = 0
 	progress_char = '-'
-	max_length = 50
+	max_length = 30
 	
 	complete_percent = ("{0:." + str(decimal_length) + "f}").format(100 * (iteration / float(total_count)))
 	
