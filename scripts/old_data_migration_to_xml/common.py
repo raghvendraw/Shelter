@@ -33,6 +33,7 @@ missing_data_dict = {}
 
 option_dict = {}
 city_ward_slum_dict = {}
+slum_wise_admin_ward_from_excel = {}
 
 # dictionary use to set option/parameter use by method
 options_dict = {
@@ -225,7 +226,7 @@ def get_household_survey(query):
 def read_xml_excel(excelFile):	
 	global option_dict
 	global city_ward_slum_dict
-	
+	global slum_wise_admin_ward_from_excel
 	global question_map_dict
 	
 	#open excel file 
@@ -275,6 +276,19 @@ def read_xml_excel(excelFile):
 	#print("dict - ", option_dict)
 	#print("city_ward_slum_dict - ", city_ward_slum_dict)
 	
+	# read excel sheet 3 for building the mapping for slum code wise admin ward
+	for row in range(sheet_choices.nrows):
+		if row != 0:
+			key = sheet_choices.cell_value(row, 0)
+			value = sheet_choices.cell_value(row, 1)
+			
+			check_slum = sheet_choices.cell_value(row, 0)
+			admin_ward_slum_code = sheet_choices.cell_value(row, 1)
+			admin_ward = sheet_choices.cell_value(row, 3)
+			#write_log(str(check_slum) + " " + str(admin_ward_slum_code) + " " + str(admin_ward))
+			if check_slum == 'slum_name':
+				slum_wise_admin_ward_from_excel[admin_ward_slum_code] = admin_ward	
+			
 	# read choice sheet to create option mapping dict 
 	for row in range(sheet_survey.nrows):
 		if row != 0:
@@ -413,7 +427,9 @@ def get_answer_type_of_unaccopied_house(xml_key, fact_dict):
 		if fact_id in fact_dict:
 			# get answer for fact 
 			answer = fact_dict[fact_id]
-			#write_log('Anwer for the fact id:' + str(answer))
+			#write_log('Answer for the fact id:' + str(answer))
+			if answer and type(answer) is list:
+				answer = answer[0];
 			answer = get_collection_for_unaccopied_house(int(answer))
 			#write_log('Returned anwer for the fact id:' + str(answer))
 	return answer;
@@ -454,7 +470,16 @@ def get_name_id(xml_key, answer_text):
 						
 	
 	return answer;
-
+#will return the admin ward for selected slum by using the mapping available in the third sheet of the mapping excel
+def get_slum_wise_admin_ward(slum_code):
+	global slum_wise_admin_ward_from_excel
+	
+	#write_log('Admin wards:' + str(slum_wise_admin_ward_from_excel))
+	if slum_code in slum_wise_admin_ward_from_excel:
+		return slum_wise_admin_ward_from_excel[slum_code]
+	else:
+		return ""
+	
 # get admin ward code for slum
 def get_admin_ward(slum_code):
 	admin_ward = None

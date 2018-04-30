@@ -62,6 +62,7 @@ def upload_xml(upload_option):
 		
 		response_obj = requests.post(kobotoolbox_url, auth=(kobotoolbox_user, kobotoolbox_password), files = upload_files)
 		
+		#write_log('Uploaded file details:' + os.path.realpath(xml_file))
 		#print('after process ', xml_file_name, ' response_obj.response_obj.status_code -> ', response_obj.status_code, ' response_obj.text -> ', response_obj.text)
 		#write_log(xml_upload_folder_path +' \t\t status code= ' + str(response_obj.status_code) +' \t\t\t response text= ' + response_obj.text)
 		
@@ -70,11 +71,27 @@ def upload_xml(upload_option):
 		else:
 			fail_file_upload_count += 1
 			
+			write_log('File not uploaded:' + os.path.realpath(xml_file))
 			write_log(xml_upload_folder_path +' \t\t status code= ' + str(response_obj.status_code) +' \t\t\t response text= ' + response_obj.text)
+		#close the open file
+		upload_files['xml_submission_file'] = None	
+		
+		sourcepath = os.path.realpath(xml_file)
+		destinationpath = sourcepath.replace('xml_output','completed_xml_output')
+		
+		if not os.path.exists(os.path.dirname(destinationpath)):
+			try:
+				os.makedirs(os.path.dirname(destinationpath))
+			except OSError as exc: # Guard against race condition
+				if exc.errno != errno.EEXIST:
+					raise
+		
+		os.rename(sourcepath,destinationpath)	
 		
 	except Exception as ex:
 		exception_log = 'Exception occurred for uploading xml file \t  exception : '+ str(ex) +' \t  traceback : '+ traceback.format_exc()
 		write_log(exception_log)
+		write_log('File not uploaded:' + os.path.realpath(xml_file))
 	
 	return response_obj
 
@@ -111,7 +128,7 @@ def upload_to_kobotoolbox(survey_photo_mapping, select_option):
 	
 	
 	# use threading to upload file faster
-	pool_obj = Pool(processes=5)
+	pool_obj = Pool(processes=15)
 	
 	response_obj = pool_obj.map(upload_xml, upload_option)
 	
