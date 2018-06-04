@@ -104,10 +104,14 @@ survey_xml_value_mapping = {
 	},
 	# RHS
 	'2': { 
-		'xml_root': 'a2NE2CCR6izXK22H2Aa9Kr',
-		'xml_root_attr_id': 'a2NE2CCR6izXK22H2Aa9Kr',
-		'xml_root_attr_version': 'vbqmmSmBxRL4Yi6CnZKEMw',
-		'formhub_uuid': 'c323c30949394726ae99e5116cebde54',
+		#'xml_root': 'a2NE2CCR6izXK22H2Aa9Kr',For local run form no 102
+		'xml_root': 'RHS_SBM_PMC_v1',# For production run
+		#'xml_root_attr_id': 'a2NE2CCR6izXK22H2Aa9Kr',For local run form no 102
+		'xml_root_attr_id': 'RHS_SBM_PMC_v1',# For production run
+		#'xml_root_attr_version': 'vbqmmSmBxRL4Yi6CnZKEMw', For local run form no 102
+		'xml_root_attr_version': 'v3ZKi3Vohh78mbvybnNiBs',# For production run
+		#'formhub_uuid': 'c323c30949394726ae99e5116cebde54', For local run form no 102
+		'formhub_uuid': '52ed51bdbc9f4ccba7109850651841f7', # For production run
 	},
 	# FF
 	'3': {
@@ -379,7 +383,7 @@ def migrate():
 			log_folder_path = os.path.join(root_output_folder, city_name, 'log')
 			
 			mapped_excelFile = mapped_excel_path_mapping[city][survey]
-
+			
 			output_folder_path = os.path.join(root_output_folder, city_name, survey_name)
 			
 			xml_root = survey_xml_value_mapping[survey]['xml_root']

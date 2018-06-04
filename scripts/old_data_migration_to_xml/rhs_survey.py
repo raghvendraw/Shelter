@@ -1,4 +1,4 @@
-#	Script written on Python 3.6
+##	Script written on Python 3.6
 # 	Author : Parag Fulzele
 #	Description : Methods to convert RHS survey into xml
 #
@@ -14,11 +14,11 @@ use_excel_data = True
 # dictionary use to set and export data into xml
 #Form number 102
 gl_rhs_xml_dict = {
-	"__version__": "vbqmmSmBxRL4Yi6CnZKEMw",
+	"__version__": "v3ZKi3Vohh78mbvybnNiBs",
 	"_submission_time": None,
     "_status": None,
     "_submitted_by": None,
-    "_xform_id_string":"a2NE2CCR6izXK22H2Aa9Kr",
+    "_xform_id_string":"RHS_SBM_PMC_v1",
     "start":None,
     "end":None,
     "admin_ward": None,
@@ -78,7 +78,7 @@ gl_rhs_xml_dict = {
 		"instanceID": None
 	},
 	"formhub": {
-		"uuid": "c323c30949394726ae99e5116cebde54"
+		"uuid": "52ed51bdbc9f4ccba7109850651841f7"
 	}
 }
 
