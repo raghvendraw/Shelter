@@ -85,8 +85,8 @@ def upload_xml(upload_option):
 			except OSError as exc: # Guard against race condition
 				if exc.errno != errno.EEXIST:
 					raise
-		
-		os.rename(sourcepath,destinationpath)	
+		if response_obj.status_code == 201:
+			os.rename(sourcepath,destinationpath)	
 		
 	except Exception as ex:
 		exception_log = 'Exception occurred for uploading xml file \t  exception : '+ str(ex) +' \t  traceback : '+ traceback.format_exc()
@@ -128,7 +128,7 @@ def upload_to_kobotoolbox(survey_photo_mapping, select_option):
 	
 	
 	# use threading to upload file faster
-	pool_obj = Pool(processes=15)
+	pool_obj = Pool(processes=10)
 	
 	response_obj = pool_obj.map(upload_xml, upload_option)
 	

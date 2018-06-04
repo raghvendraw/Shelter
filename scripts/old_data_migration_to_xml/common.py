@@ -30,7 +30,14 @@ log_folder_path = os.path.join(root_folder_path, 'xml_output', 'log')
 question_map_dict = {}
 question_option_map_dict = {}
 missing_data_dict = {}
-
+#This collection will contain the mapping for the new form question with the column position from the data excel
+question_data_excel_column_mapping = {}
+#This collection will contain the slum wise collection containing household wise answers options for all questions from data excel
+slum_wise_house_hold_answers_from_excel = {}
+#This collection will contain the information of survey date and survey conductor name, slumhousehold wise
+slum_household_wise_surveyor_admin_data = {}
+#This collection will contain the distinct slumns as received from excel with households against the slum
+distinct_slum_with_household_from_excel = {}
 option_dict = {}
 city_ward_slum_dict = {}
 slum_wise_admin_ward_from_excel = {}
@@ -43,7 +50,8 @@ options_dict = {
 	'survey2': None,
 	
 	'mapped_excelFile': None,
-	
+	#The excel file containing the survey data to be used for creating the XML's to be uploaded to KOBO server
+	'data_excel_file' : 'E:/Projects/Shelter/Code/Shelter/scripts/old_data_migration_to_xml/FilesToRead/MappedExcel_Pune/Data/Rapid_household_survey_bhau_patil_padal_Aundh_Feb_2016.xlsx',
 	# xml values to be set while generating xml
 	'xml_root': '',
 	'xml_root_attr_id': '',
@@ -284,10 +292,11 @@ def read_xml_excel(excelFile):
 			
 			check_slum = sheet_choices.cell_value(row, 0)
 			admin_ward_slum_code = sheet_choices.cell_value(row, 1)
+			admin_ward_slum_code = str(admin_ward_slum_code).replace('.0','')
 			admin_ward = sheet_choices.cell_value(row, 3)
-			#write_log(str(check_slum) + " " + str(admin_ward_slum_code) + " " + str(admin_ward))
+			write_log(str(check_slum) + " " + str(admin_ward_slum_code) + " " + str(admin_ward))
 			if check_slum == 'slum_name':
-				slum_wise_admin_ward_from_excel[admin_ward_slum_code] = admin_ward	
+				slum_wise_admin_ward_from_excel[str(admin_ward_slum_code)] = str(admin_ward)	
 			
 	# read choice sheet to create option mapping dict 
 	for row in range(sheet_survey.nrows):
@@ -304,6 +313,7 @@ def read_xml_excel(excelFile):
 def read_map_excel(excelFile):
 	global question_map_dict
 	global question_option_map_dict
+	global question_data_excel_column_mapping
 	
 	#open excel file 
 	#read mapping for quetion and new xml key
@@ -325,11 +335,14 @@ def read_map_excel(excelFile):
 			row_data.append(cell.value)
 		
 		question_id = row_data[5]
+		data_excel_position = row_data[6]
 		if not (question_id is None):
 			dict_key = row_data[1]
 			
 			question_map_dict[dict_key] = question_id
-	
+			if data_excel_position is not None:
+				question_data_excel_column_mapping['a'+str(data_excel_position)] = question_id
+			
 	#print("dict question map - ", question_map_dict)
 	
 	# set option mapping dict for all qustion mapped
@@ -387,6 +400,7 @@ def get_answer(xml_key, fact_dict):
 				if isinstance(answer, list):
 					temp_answer = None
 					for ans in answer:
+						ans = ans.strip()
 						if ans and int(ans) in question_option_map_dict[fact_id]:
 							temp_ans = question_option_map_dict[fact_id][int(ans)]
 							if not (temp_ans is None):
@@ -399,6 +413,8 @@ def get_answer(xml_key, fact_dict):
 				else:
 					#write_log('In else condition')
 					if answer:
+						if answer == "":
+							answer = "0"
 						answer_option = int(answer)
 						if answer_option in question_option_map_dict[fact_id]:
 							answer = question_option_map_dict[fact_id][answer_option]
@@ -880,6 +896,9 @@ def show_progress_bar (iteration, total_count,completed_slum,total_slums, status
 	decimal_length = 0
 	progress_char = '-'
 	max_length = 30
+	after_suffix = ' % slums completed:'
+	
+	total_percent_completed = ("{0:." + str(decimal_length) + "f}").format(100 * ((completed_slum-1)/float(total_slums))) 
 	
 	complete_percent = ("{0:." + str(decimal_length) + "f}").format(100 * (iteration / float(total_count)))
 	
@@ -887,7 +906,7 @@ def show_progress_bar (iteration, total_count,completed_slum,total_slums, status
 	
 	progress_bar = progress_char * progress_bar_length + ' ' * (max_length - progress_bar_length)
 	
-	print('\r%s [%s] %s%% %s' % (prefix, progress_bar, complete_percent, suffix), end = '\r', flush=True)
+	print('\rCount %s %s [%s] %s%% %s (%s %s%%)' % (completed_slum, prefix, progress_bar, complete_percent, suffix, after_suffix, total_percent_completed), end = '\r', flush=True)
     
 	return;
 
@@ -1041,6 +1060,101 @@ def read_missing_data(excelFile):
 			dict_key = house_no
 			missing_data_dict[dict_key] = row_data[3]
 
+# function to read survey data excel file(xlsx)
+def read_survey_data_excel(excelFile=''):
+	global question_data_excel_column_mapping
+	global slum_wise_house_hold_answers_from_excel
+	
 
+	#open excel file 
+	#read row by row and create a collection of Slum wise household wise collection of question and answers
+	#create mapping dict
+	
+	workbook = openpyxl.load_workbook(excelFile)
+	
+	# List sheet names, and pull a sheet by name
+	sheet_names = workbook.get_sheet_names()
+	
+	#print('Sheet Names', sheet_names)
+	
+	sheet_question_answer_options = workbook.worksheets[0]
+	sheet_admin_info = workbook.worksheets[1]
+	#Fill the collection for finding the slum household wise survey date and surveyor name
+	for row in sheet_admin_info.iter_rows(row_offset=1):
+		row_data  = []
+		for cell in row:
+			row_data.append(cell.value)
+		if row_data[0] is None and row_data[1] is None and row_data[2] is None:
+			break
+		slumhouseholdcode = row_data[1]
+		if slumhouseholdcode not in slum_household_wise_surveyor_admin_data:
+			slum_household_wise_surveyor_admin_data.setdefault(str(slumhouseholdcode), {})
+		slumdict = slum_household_wise_surveyor_admin_data[str(slumhouseholdcode)]
+		slumdict['date'] = row_data[3]
+		slumdict['surveyor'] = row_data[4]
+	
+	#Fill the question answer data as received from the data excel	
+	for row in sheet_question_answer_options.iter_rows(row_offset=1):
+		row_data  = []
+		#write_log('Row variable:' + str(row))		
+		for cell in row:
+			row_data.append(cell.value)
+		if row_data[0] is None and row_data[1] is None and row_data[2] is None:
+			break
+		#write_log('Slum code value before substring:' + str(row_data[2]))		
+		slumcode = row_data[1][:-4]#remove last four characters to get the slum code
+		slumhouseholdcode = row_data[1]
+		#write_log('Slum code value:' + str(slumcode))		
+		if slumcode not in slum_wise_house_hold_answers_from_excel:
+			slum_wise_house_hold_answers_from_excel.setdefault(str(slumcode), {})
+		slumdict = slum_wise_house_hold_answers_from_excel[str(slumcode)]
+		#fill the distinct slum household collection
+		if slumcode not in distinct_slum_with_household_from_excel:
+			distinct_slum_with_household_from_excel.setdefault(str(slumcode),{})
+		slum_wise_household_collection = distinct_slum_with_household_from_excel[str(slumcode)]
+		
+		household = row_data[2]
+		if household not in slum_wise_household_collection:
+			slum_wise_household_collection[household] = household
+			
+		if household not in slumdict:
+			slumdict.setdefault(str(household), {})
+			
+		household_dict = slumdict[str(household)]
+		#Check if the house hold entry exists for the given question and the old entry is that of Occupied house and new entry is of locked house then use old one. If the 
+		if slumhouseholdcode in slum_household_wise_surveyor_admin_data:
+			household_dict[412] = slum_household_wise_surveyor_admin_data[slumhouseholdcode]["date"]
+			household_dict[413] = slum_household_wise_surveyor_admin_data[slumhouseholdcode]["surveyor"]
+		cell_counter = 0
+		
+		for row_cell_data in row_data:
+			#write_log('Cell Counter:' + str(cell_counter))		
+			if 'a'+str(cell_counter) in question_data_excel_column_mapping:
+				question_id = question_data_excel_column_mapping['a'+str(cell_counter)]
+				#write_log('Question ID:' + str(question_id))
+				if question_id is not None:
+					#write_log('Answer as received from excel data:' + str(row_cell_data))
+					
+					answer = row_cell_data
+					if answer is not None and type(answer) == str and ',' in answer:
+						answer_arr = answer.split(',')		
+						household_dict[question_id] = answer_arr
+					else:
+						household_dict[question_id] = answer
+			cell_counter = cell_counter + 1			
+	#write_log('Collection of answers from excel:' + str(slum_wise_house_hold_answers_from_excel))		
+	return;
 
+#This function will search for numbers from the given string. If more than one number is found that 
+#first number will be taken as the double house number else the available number will be used. 
+def find_double_house_number(family_head_full_name=''):	
+	double_house_number = None
+	family_head_full_name = str(family_head_full_name)
+	if family_head_full_name is not None:
+		numbers_from_string = [int(s) for s in family_head_full_name.split(' ') if s.isdigit()]
+		if numbers_from_string is not None and type(numbers_from_string) == list and len(numbers_from_string) > 0:
+			#write_log('find_double_house_number Is list:' + str(numbers_from_string))
+			double_house_number = str(numbers_from_string[0])
+		
+	return double_house_number;
 
